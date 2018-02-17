@@ -17,56 +17,82 @@ namespace WozUCoreDemo.Controllers
             };
         }
 
+        // Convert return object to IActionResult and use base functions to return appropriate response
         [HttpGet]
-        public List<Customer> GetAllCustomers()
+        public IActionResult GetAllCustomers()
         {
-            return customers;
+            return base.Ok(customers);
         }
 
+        // Can use Json function to return an object
+        // Update function to check if customer was found
         [HttpGet("{id}")]
-        public Customer GetCustomer(int id)
-        {
-            var customer = customers.FirstOrDefault(cust => cust.Id == id);
-            return customer;
-        }
-
-        // Use POST action to create new Customer
-        [HttpPost]
-        public Customer AddCustomer([FromBody]Customer newCustomer)
-        {
-            if (newCustomer != null)
-            {
-                customers.Add(newCustomer);
-            }
-            return newCustomer;
-        }
-
-        // Use PUT action to update a customer
-        [HttpPut("{id}")]
-        public Customer UpdateCustomer(int id, [FromBody]Customer updatedCustomer)
+        public IActionResult GetCustomer(int id)
         {
             var customer = customers.FirstOrDefault(cust => cust.Id == id);
             if (customer != null)
             {
-                customer.FirstName = updatedCustomer.FirstName;
-                customer.LastName = updatedCustomer.LastName;
-                customer.Email = updatedCustomer.Email;
-                return customer;
+                return base.Json(customer);
             }
-            return null;
+            return base.NotFound();
         }
 
-        // Use DELETE action to delete customer
+        // Update function to return proper result
+        [HttpPost]
+        public IActionResult AddCustomer([FromBody]Customer newCustomer)
+        {
+            // Use a try catch in case there is a problem adding the object to storage
+            if (newCustomer != null)
+            {
+                try
+                {
+                    customers.Add(newCustomer);
+                    return base.Created($"/{newCustomer.Id}", newCustomer);
+                }
+                catch (System.Exception ex)
+                {
+                    // Can specify status code to return and a message in the body of the response
+                    return base.StatusCode(500, ex.Message);
+                }
+            }
+            return base.BadRequest();
+        }
+
+        // Update method for appropriate response
+        [HttpPut("{id}")]
+        public IActionResult UpdateCustomer(int id, [FromBody]Customer updatedCustomer)
+        {
+            var customer = customers.FirstOrDefault(cust => cust.Id == id);
+            if (customer != null)
+            {
+                try
+                {
+                    customer.FirstName = updatedCustomer.FirstName;
+                    customer.LastName = updatedCustomer.LastName;
+                    customer.Email = updatedCustomer.Email;
+                    // Request worked but no content to return (Ok, but without a body)
+                    return base.NoContent();
+                }
+                catch (System.Exception ex)
+                {
+                    // Error is probably because of bad data
+                    return base.BadRequest();
+                }
+            }
+            return base.NotFound();
+        }
+
+        // Update to send appropriate response
         [HttpDelete("{id}")]
-        public Customer DeleteCustomer(int id)
+        public IActionResult DeleteCustomer(int id)
         {
             var customer = customers.FirstOrDefault(cust => cust.Id == id);
             if (customer != null)
             {
                 customers.Remove(customer);
-                return customer;
+                return base.NoContent();
             }
-            return null;
+            return base.NotFound();
         }
     }
 }
