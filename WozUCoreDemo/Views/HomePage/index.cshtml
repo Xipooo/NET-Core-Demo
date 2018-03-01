@@ -1,5 +1,7 @@
-<!-- Declare the model data type that will be used for the view -->
+<!-- Add Tag Helpers to the view -->
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model System.Collections.Generic.List<WozUCoreDemo.Models.Customer>
+
 
 <!DOCTYPE html>
 <html>
@@ -13,14 +15,16 @@
         @foreach (var customer in Model)
         {
             <div>
-                <dl>
-                    <dt>First Name: </dt>
-                    <dd>@customer.FirstName</dd>
-                    <dt>Last Name:</dt>
-                    <dd>@customer.LastName</dd>
-                    <dt>Email:</dt>
-                    <dd>@customer.Email</dd>
-                </dl>
+                <a asp-controller="HomePage" asp-action="Edit" asp-route-id="@customer.Id">
+                    <dl>
+                        <dt>First Name: </dt>
+                        <dd>@customer.FirstName</dd>
+                        <dt>Last Name:</dt>
+                        <dd>@customer.LastName</dd>
+                        <dt>Email:</dt>
+                        <dd>@customer.Email</dd>
+                    </dl>
+                </a>
             </div>
         }
     </body>
