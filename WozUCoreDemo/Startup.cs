@@ -22,14 +22,12 @@ namespace WozUCoreDemo
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<WozUContext>(options => options.UseInMemoryDatabase("WozUContext"));
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -37,7 +35,14 @@ namespace WozUCoreDemo
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            // Adding routing to map location of controllers and actions from URL without annotations
+            app.UseMvc(r =>
+                r.MapRoute(
+                    "default",
+                    "{controller=HomePage}/{action=Index}/{id?}"
+                )
+            );
+
         }
     }
 }
