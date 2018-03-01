@@ -30,19 +30,32 @@ namespace WozUCoreDemo
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // Call database initialization method
+            Initialize(app.ApplicationServices);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            // Adding routing to map location of controllers and actions from URL without annotations
             app.UseMvc(r =>
                 r.MapRoute(
                     "default",
                     "{controller=HomePage}/{action=Index}/{id?}"
                 )
             );
+        }
 
+        // Function to fill database with seed data
+        public static void Initialize(IServiceProvider serviceProvider)
+        {
+            var context = serviceProvider.GetRequiredService<WozUContext>();
+            if (!context.Customers.Any())
+            {
+                context.Customers.Add(new Customer { FirstName = "Frodo", LastName = "Baggins", Email = "frodo@theShire.net" });
+                context.Customers.Add(new Customer { FirstName = "Steve", LastName = "Bishop", Email = "steve.bishop@woz-u.com" });
+                context.SaveChanges();
+            }
         }
     }
 }

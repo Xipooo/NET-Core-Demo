@@ -1,3 +1,6 @@
+<!-- Declare the model data type that will be used for the view -->
+@model System.Collections.Generic.List<WozUCoreDemo.Models.Customer>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -6,5 +9,19 @@
     <body>
         <h1>Home Index Page</h1>
         <p>This page will be the default landing page.</p>
+        <!-- Razor syntax foreach loop that will display customer info for each customer in the model passed by the controller -->
+        @foreach (var customer in Model)
+        {
+            <div>
+                <dl>
+                    <dt>First Name: </dt>
+                    <dd>@customer.FirstName</dd>
+                    <dt>Last Name:</dt>
+                    <dd>@customer.LastName</dd>
+                    <dt>Email:</dt>
+                    <dd>@customer.Email</dd>
+                </dl>
+            </div>
+        }
     </body>
 </html>

@@ -1,13 +1,25 @@
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using WozUCoreDemo.Models;
 
 namespace WozUCoreDemo.Controllers
 {
-    // Add new MVC controller for managing Customer Views
     public class HomePageController : Controller
     {
-        // Add action method that returns the view of the same name (index.cshtml)
+        // Use dependency injection to get the database context
+        private readonly WozUContext _context;
+        public HomePageController(WozUContext context)
+        {
+            _context = context;
+        }
         public IActionResult Index() {
-            return View();
+
+            // Get a list of all the customers in the system.
+            List<Customer> customers = _context.Customers.ToList();
+
+            // Pass customers to the view
+            return View(customers);
         }
     }
 }
