@@ -30,7 +30,6 @@ namespace WozUCoreDemo
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            // Call database initialization method
             Initialize(app.ApplicationServices);
 
             if (env.IsDevelopment())
@@ -45,8 +44,7 @@ namespace WozUCoreDemo
                 )
             );
         }
-
-        // Function to fill database with seed data
+        
         public static void Initialize(IServiceProvider serviceProvider)
         {
             var context = serviceProvider.GetRequiredService<WozUContext>();

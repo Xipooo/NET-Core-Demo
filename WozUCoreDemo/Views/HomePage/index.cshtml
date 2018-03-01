@@ -1,6 +1,5 @@
-<!-- Add Tag Helpers to the view -->
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@model System.Collections.Generic.List<WozUCoreDemo.Models.Customer>
+<!-- Remove extra namespaces and tag helper -->
+@model List<Customer>
 
 
 <!DOCTYPE html>
@@ -11,7 +10,7 @@
     <body>
         <h1>Home Index Page</h1>
         <p>This page will be the default landing page.</p>
-        <!-- Razor syntax foreach loop that will display customer info for each customer in the model passed by the controller -->
+        
         @foreach (var customer in Model)
         {
             <div>
