@@ -1,18 +1,12 @@
-<!-- Remove extra namespaces and tag helper -->
+<!-- Add Layout reference and remove excess code -->
+@{
+    Layout = "_Layout";
+}
 @model Customer
-
-<!DOCTYPE html>
-<html>
-    <head>
-            <title>Home Index Page</title>
-    </head>
-    <body>
-        <form asp-controller="HomePage" asp-action="Edit" asp-anti-forgery="true">
-            <input type="hidden" value="@Model.Id" />
-            <label asp-for="FirstName"></label><input asp-for="FirstName">
-            <label asp-for="LastName"></label><input asp-for="LastName">
-            <label asp-for="Email"></label><input asp-for="Email">
-            <button type="submit">Save</button>
-        </form>
-    </body>
-</html>
+<form asp-controller="HomePage" asp-action="Edit" asp-anti-forgery="true">
+    <input type="hidden" value="@Model.Id" />
+    <label asp-for="FirstName"></label><input asp-for="FirstName">
+    <label asp-for="LastName"></label><input asp-for="LastName">
+    <label asp-for="Email"></label><input asp-for="Email">
+    <button type="submit">Save</button>
+</form>

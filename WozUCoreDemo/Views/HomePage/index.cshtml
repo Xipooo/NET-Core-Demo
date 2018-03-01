@@ -1,30 +1,23 @@
-<!-- Remove extra namespaces and tag helper -->
+<!-- Add Layout reference and remove excess code -->
+@{
+    Layout = "_Layout";
+}
 @model List<Customer>
+<h1>Home Index Page</h1>
+<p>This page will be the default landing page.</p>
 
-
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Home Index Page</title>
-    </head>
-    <body>
-        <h1>Home Index Page</h1>
-        <p>This page will be the default landing page.</p>
-        
-        @foreach (var customer in Model)
-        {
-            <div>
-                <a asp-controller="HomePage" asp-action="Edit" asp-route-id="@customer.Id">
-                    <dl>
-                        <dt>First Name: </dt>
-                        <dd>@customer.FirstName</dd>
-                        <dt>Last Name:</dt>
-                        <dd>@customer.LastName</dd>
-                        <dt>Email:</dt>
-                        <dd>@customer.Email</dd>
-                    </dl>
-                </a>
-            </div>
-        }
-    </body>
-</html>
+@foreach (var customer in Model)
+{
+    <div>
+        <a asp-controller="HomePage" asp-action="Edit" asp-route-id="@customer.Id">
+            <dl>
+                <dt>First Name: </dt>
+                <dd>@customer.FirstName</dd>
+                <dt>Last Name:</dt>
+                <dd>@customer.LastName</dd>
+                <dt>Email:</dt>
+                <dd>@customer.Email</dd>
+            </dl>
+        </a>
+    </div>
+}
