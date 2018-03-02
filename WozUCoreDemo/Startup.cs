@@ -24,7 +24,13 @@ namespace WozUCoreDemo
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<WozUContext>(options => options.UseInMemoryDatabase("WozUContext"));
+            services.AddDbContext<WozUContext>(
+                // Use MySql package for connection (may require restart of VSCode)
+                options => options.UseMySql(
+                    // Use appsettings.json ConnectionStrings: DefaultConnection
+                    // NOTE: You should add appsettings.json to .gitIgnore to prevent 
+                    //      settings from being visible in public repositories
+                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc();
         }
 
@@ -44,16 +50,32 @@ namespace WozUCoreDemo
                 )
             );
         }
-        
+
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            var context = serviceProvider.GetRequiredService<WozUContext>();
-            if (!context.Customers.Any())
+            //Add check for pending migrations to database
+            //Try/Catch for catching when migration created causes error
+            try
             {
-                context.Customers.Add(new Customer { FirstName = "Frodo", LastName = "Baggins", Email = "frodo@theShire.net" });
-                context.Customers.Add(new Customer { FirstName = "Steve", LastName = "Bishop", Email = "steve.bishop@woz-u.com" });
-                context.SaveChanges();
+                var context = serviceProvider.GetService<WozUContext>();
+                if (context.Database.GetPendingMigrations().Any())
+                {
+                    context.Database.Migrate();
+                }
+
+                if (!context.Customers.Any())
+                {
+                    context.Customers.Add(new Customer { FirstName = "Frodo", LastName = "Baggins", Email = "frodo@theShire.net" });
+                    context.Customers.Add(new Customer { FirstName = "Steve", LastName = "Bishop", Email = "steve.bishop@woz-u.com" });
+                    context.SaveChanges();
+                }
             }
+            catch (Exception ex){
+                Console.WriteLine("Unable to seed database.");
+                Console.WriteLine(ex.Message);
+            }
+
+
         }
     }
 }

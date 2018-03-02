@@ -4,3 +4,6 @@ WozUCoreDemo/bin/
 WozUCoreDemo/obj/
 .vscode/
 sh.exe.stackdump
+
+#Un-comment this line to keep settings out of Git Repository
+#WozUCoreDemo/appsettings.json
